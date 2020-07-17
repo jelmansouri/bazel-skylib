@@ -1,5 +1,4 @@
 load("//:bzl_library.bzl", "bzl_library")
-load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 licenses(["notice"])
 
@@ -98,29 +97,4 @@ filegroup(
 bzl_library(
     name = "old_sets",
     srcs = ["old_sets.bzl"],
-)
-
-cc_binary(
-    name = "process_wrapper",
-    srcs = [
-        "process_wrapper/process_wrapper.cc",
-        "process_wrapper/system.h",
-        "process_wrapper/utils.h",
-        "process_wrapper/utils.cc",
-    ] + select({
-        "@bazel_tools//src/conditions:host_windows": [
-            "process_wrapper/system_windows.cc",
-        ],
-        "//conditions:default": [
-            "process_wrapper/system_posix.cc",
-        ],
-    }),
-    defines = [] + select({
-        "@bazel_tools//src/conditions:host_windows": [
-            "UNICODE",
-            "_UNICODE",
-        ],
-        "//conditions:default": [],
-    }),
-    visibility = ["//visibility:public"],
 )
